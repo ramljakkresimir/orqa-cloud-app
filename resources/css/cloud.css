@@ -25,3 +25,18 @@ body.cloud-body { margin:0; color:var(--cloud-text); background:var(--cloud-bg);
 .cloud-muted { color:var(--cloud-muted); }
 .btn-primary { --bs-btn-bg:#2563eb; --bs-btn-border-color:#2563eb; --bs-btn-hover-bg:#1d4ed8; --bs-btn-hover-border-color:#1d4ed8; }
 @media(max-width:575.98px) { .cloud-topbar { height:66px; padding:0 16px; } .cloud-main { padding:22px 14px; } .cloud-card .card-body { padding:20px; } }
+
+/* Phase 5.3 - shared dashboard components */
+.cloud-dashboard-heading h1 { letter-spacing:-.035em; }
+.cloud-stat-card .card-body { padding:24px; }
+.cloud-stat-icon { display:grid; place-items:center; width:44px; height:44px; border-radius:13px; background:#eaf1ff; color:#2563eb; font-size:22px; margin-bottom:18px; }
+.cloud-stat-value { font-size:clamp(22px,2.2vw,30px); font-weight:750; letter-spacing:-.045em; line-height:1.2; overflow-wrap:anywhere; }
+.cloud-action-btn { padding:.7rem 1.1rem; border-radius:10px; }
+.cloud-storage-progress { height:12px; border-radius:100px; background:#eaf0f9; }
+.cloud-storage-progress .progress-bar { background:#2563eb; border-radius:100px; }
+.cloud-dashboard-table thead th { font-size:12px; color:#667085; text-transform:uppercase; letter-spacing:.04em; font-weight:650; border-bottom-color:#e5eaf2; }
+.cloud-dashboard-table tbody td { font-size:14px; padding-top:14px; padding-bottom:14px; color:#344054; }
+.cloud-file-name { display:inline-block; max-width:280px; vertical-align:middle; overflow-wrap:anywhere; }
+.cloud-empty-state { padding:36px 12px; border:1px dashed #dce4f2; border-radius:12px; }
+.cloud-empty-state > i { color:#2563eb; font-size:32px; }
+@media(max-width:575.98px) { .cloud-stat-card .card-body { padding:20px; } }

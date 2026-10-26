@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -24,15 +25,11 @@ Route::middleware('auth')->group(function () {
         abort(403);
     })->name('dashboard');
 
-    Route::get('/user/dashboard', function () {
-        return view('user.dashboard');
-    })
+    Route::get('/user/dashboard', [DashboardController::class, 'user'])
         ->middleware('role:user')
         ->name('user.dashboard');
 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })
+    Route::get('/admin/dashboard', [DashboardController::class, 'admin'])
         ->middleware('role:super_admin')
         ->name('admin.dashboard');
 });
