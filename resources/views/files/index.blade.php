@@ -61,6 +61,7 @@
                                 @if ($isSuperAdmin)
                                     <th>Added By</th>
                                 @endif
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
@@ -91,11 +92,41 @@
                                             {{ $file->user?->username ?? 'Unknown' }}
                                         </td>
                                     @endif
+                                        <td>
+                                            <div class="d-flex gap-2">
+
+                                                <!-- Download -->
+                                                <a
+                                                    href="{{ route('files.download', $file) }}"
+                                                    class="btn btn-sm btn-outline-primary"
+                                                >
+                                                    Download
+                                                </a>
+
+                                                <!-- Delete -->
+                                                <form
+                                                    action="{{ route('files.destroy', $file) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this file?');"
+                                                >
+                                                    @csrf
+                                                    @method('DELETE')
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                        </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td
-                                        colspan="{{ $isSuperAdmin ? 5 : 4 }}"
+                                        colspan="{{ $isSuperAdmin ? 6 : 5 }}"
                                         class="text-center text-muted py-4"
                                     >
                                         No files found.

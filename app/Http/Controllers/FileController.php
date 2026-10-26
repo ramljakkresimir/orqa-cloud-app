@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\File as FileRule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Gate;
 use RuntimeException;
 use Throwable;
 
@@ -18,6 +20,8 @@ class FileController extends Controller
 {
     public function index(Request $request): View
     {
+        Gate::authorize('viewAny', File::class);
+
         $user = $request->user();
 
         $isSuperAdmin = $user->hasRole('super_admin');
@@ -44,6 +48,8 @@ class FileController extends Controller
 
     public function create(Request $request): View
     {
+        Gate::authorize('create', File::class);
+
         return view('files.create', [
             'remainingBytes' => $request->user()->remainingStorageBytes(),
         ]);
@@ -51,6 +57,8 @@ class FileController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        Gate::authorize('create', File::class);
+
         $validated = $request->validate([
             'document' => [
                 'required',
@@ -125,4 +133,80 @@ class FileController extends Controller
             ->route('user.dashboard')
             ->with('success', 'File uploaded successfully.');
     }
+    
+    
+    /**
+     * Download a file if the user is authorized.
+     */
+    public function download(Request $request, File $file): StreamedResponse
+    {
+        Gate::authorize('download', $file);
+
+        // Only allow known private storage disks.
+        abort_unless(
+            in_array($file->disk, ['cloud', 'local'], true),
+            404
+        );
+
+        $disk = Storage::disk($file->disk);
+
+        abort_unless(
+            $disk->exists($file->storage_path),
+            404
+        );
+
+        return $disk->download(
+            $file->storage_path,
+            $file->original_name
+        );
+    }
+
+    
+    /**
+     * Delete a file if the user is authorized.
+     */
+    public function destroy(Request $request, File $file): RedirectResponse
+    {
+        Gate::authorize('delete', $file);
+
+        DB::transaction(function () use ($file): void {
+            // Lock the owner row to coordinate with uploads.
+            User::query()
+                ->lockForUpdate()
+                ->findOrFail($file->user_id);
+
+            // Lock and reload the file record.
+            $lockedFile = File::query()
+                ->lockForUpdate()
+                ->findOrFail($file->id);
+
+            // Recheck authorization against the current record.
+            Gate::authorize('delete', $lockedFile);
+
+            abort_unless(
+                in_array($lockedFile->disk, ['cloud', 'local'], true),
+                404
+            );
+
+            $disk = Storage::disk($lockedFile->disk);
+
+            if ($disk->exists($lockedFile->storage_path)) {
+                $deleted = $disk->delete($lockedFile->storage_path);
+
+                if (! $deleted) {
+                    throw new RuntimeException(
+                        'Unable to delete the stored file.'
+                    );
+                }
+            }
+
+            $lockedFile->delete();
+        });
+
+        return redirect()
+            ->route('files.index')
+            ->with('success', 'File deleted successfully.');
+    }
+
+
 }

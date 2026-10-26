@@ -59,6 +59,16 @@ Route::get('/files', [FileController::class, 'index'])
     ->middleware(['auth', 'role:user,super_admin'])
     ->name('files.index');
 
+// Download a file (owner or super administrator).
+Route::get('/files/{file}/download', [FileController::class, 'download'])
+    ->middleware(['auth', 'role:user,super_admin'])
+    ->name('files.download');
+
+// Delete a file (owner or super administrator).
+Route::delete('/files/{file}', [FileController::class, 'destroy'])
+    ->middleware(['auth', 'role:user,super_admin'])
+    ->name('files.destroy');
+
 // File management routes for regular users.
 Route::middleware(['auth', 'role:user'])->group(function () {
     Route::get('/files/create', [FileController::class, 'create'])
