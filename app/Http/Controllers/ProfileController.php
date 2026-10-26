@@ -14,10 +14,26 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
+    
     public function edit(Request $request): View
     {
+        $user = $request->user();
+
+        $totalBytes = (int) $user->quota_bytes;
+        $usedBytes = $user->usedStorageBytes();
+
+        $remainingBytes = max(0, $totalBytes - $usedBytes);
+
+        $usedPercentage = $totalBytes > 0
+            ? min(100, round(($usedBytes / $totalBytes) * 100, 1))
+            : 0;
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'totalBytes' => $totalBytes,
+            'usedBytes' => $usedBytes,
+            'remainingBytes' => $remainingBytes,
+            'usedPercentage' => $usedPercentage,
         ]);
     }
 

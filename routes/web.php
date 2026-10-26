@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminUserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 
@@ -77,5 +78,10 @@ Route::middleware(['auth', 'role:user'])->group(function () {
     Route::post('/files', [FileController::class, 'store'])
         ->name('files.store');
 });
+
+// Super administrator: users and storage quotas.
+Route::get('/admin/users', [AdminUserController::class, 'index'])
+    ->middleware(['auth', 'role:super_admin'])
+    ->name('admin.users.index');
 
 require __DIR__.'/auth.php';

@@ -19,6 +19,12 @@
             class="btn btn-primary">
                 View All Files
             </a>
+            <a
+                href="{{ route('admin.users.index') }}"
+                class="btn btn-outline-primary mt-3"
+            >
+                View User Storage
+            </a>
         </div>
 
         <p>Welcome, {{ auth()->user()->name }}!</p>
