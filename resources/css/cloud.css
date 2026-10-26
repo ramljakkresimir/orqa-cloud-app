@@ -1,0 +1,27 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+
+:root { --cloud-primary:#2563eb; --cloud-bg:#f6f8fc; --cloud-border:#e5eaf2; --cloud-text:#172033; --cloud-muted:#667085; }
+body.cloud-body { margin:0; color:var(--cloud-text); background:var(--cloud-bg); font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+.cloud-shell { min-height:100vh; display:flex; }
+.cloud-sidebar { width:250px; flex:0 0 250px; background:#fff; border-right:1px solid var(--cloud-border); padding:28px 16px 20px; }
+.cloud-brand { display:flex; align-items:center; gap:10px; margin:0 12px 38px; font-size:19px; text-decoration:none; color:var(--cloud-text); font-weight:600; letter-spacing:-.5px; }
+.cloud-brand-mark { display:grid; place-items:center; height:34px; width:34px; border-radius:11px; background:#eaf1ff; color:var(--cloud-primary); }
+.cloud-nav { display:grid; gap:5px; }
+.cloud-nav-link { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; color:#596579; text-decoration:none; font-weight:500; font-size:14px; transition:background .15s,color .15s; }
+.cloud-nav-link:hover { background:#f1f5ff; color:#1d4ed8; }
+.cloud-nav-link.active { background:#ebf2ff; color:#1d4ed8; font-weight:650; }
+.cloud-nav-link i { font-size:18px; }
+.cloud-logout-button { background:none; border:0; text-align:left; cursor:pointer; }
+.cloud-sidebar .cloud-logout { margin-top:auto; }
+.cloud-content { min-width:0; flex:1; }
+.cloud-topbar { height:76px; display:flex; align-items:center; justify-content:space-between; padding:0 clamp(20px,3.5vw,52px); background:#fff; border-bottom:1px solid var(--cloud-border); }
+.cloud-page-label { font-size:15px; font-weight:600; }
+.cloud-account { display:flex; align-items:center; gap:11px; font-size:14px; font-weight:500; }
+.cloud-avatar { display:grid; place-items:center; height:34px; width:34px; border-radius:50%; background:#eaf1ff; color:#1d4ed8; font-weight:700; }
+.cloud-main { max-width:1340px; margin:0 auto; padding:clamp(24px,3.5vw,52px); }
+.cloud-card { border:1px solid var(--cloud-border); border-radius:16px; background:#fff; box-shadow:0 5px 22px rgba(27,43,75,.035); }
+.cloud-card .card-body { padding:28px; }
+.cloud-muted { color:var(--cloud-muted); }
+.btn-primary { --bs-btn-bg:#2563eb; --bs-btn-border-color:#2563eb; --bs-btn-hover-bg:#1d4ed8; --bs-btn-hover-border-color:#1d4ed8; }
+@media(max-width:575.98px) { .cloud-topbar { height:66px; padding:0 16px; } .cloud-main { padding:22px 14px; } .cloud-card .card-body { padding:20px; } }

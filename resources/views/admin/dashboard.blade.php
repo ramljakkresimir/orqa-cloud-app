@@ -1,47 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard - ORQA Cloud</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-</head>
-<body class="bg-light">
-    <div class="container py-5">
-        <h1>Super Administrator Dashboard</h1>
-
-        <div class="mt-4">
-            <a href="{{ route('files.index') }}"
-            class="btn btn-primary">
-                View All Files
-            </a>
-            <a
-                href="{{ route('admin.users.index') }}"
-                class="btn btn-outline-primary mt-3"
-            >
-                View User Storage
-            </a>
-        </div>
-
-        <p>Welcome, {{ auth()->user()->name }}!</p>
-
-        <div class="alert alert-info">
-            Here we will display all uploaded files
-            and user storage information.
-        </div>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit"
-                    class="btn btn-outline-danger">
-                Logout
-            </button>
-        </form>
+<x-cloud-layout title="Admin Dashboard">
+    <div class="mb-4">
+        <div class="text-uppercase small fw-semibold cloud-muted mb-2">Workspace overview</div>
+        <h1 class="fw-bold mb-2">Welcome, {{ auth()->user()->name }}!</h1>
+        <p class="cloud-muted mb-0">Manage files and review user storage from one place.</p>
     </div>
-</body>
-</html>
+
+    <div class="row g-4">
+        <div class="col-12 col-md-6">
+            <section class="card cloud-card h-100">
+                <div class="card-body">
+                    <div class="fs-2 text-primary mb-3"><i class="bi bi-folder2-open" aria-hidden="true"></i></div>
+                    <h2 class="h5 fw-semibold">All Files</h2>
+                    <p class="cloud-muted">Browse, download, and manage uploaded files.</p>
+                    <a href="{{ route('files.index') }}" class="btn btn-primary">View All Files</a>
+                </div>
+            </section>
+        </div>
+        <div class="col-12 col-md-6">
+            <section class="card cloud-card h-100">
+                <div class="card-body">
+                    <div class="fs-2 text-primary mb-3"><i class="bi bi-people" aria-hidden="true"></i></div>
+                    <h2 class="h5 fw-semibold">User Storage</h2>
+                    <p class="cloud-muted">See users and their available storage quota.</p>
+                    <a href="{{ route('admin.users.index') }}" class="btn btn-outline-primary">View User Storage</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</x-cloud-layout>
