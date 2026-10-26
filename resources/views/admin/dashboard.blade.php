@@ -14,6 +14,13 @@
     <div class="container py-5">
         <h1>Super Administrator Dashboard</h1>
 
+        <div class="mt-4">
+            <a href="{{ route('files.index') }}"
+            class="btn btn-primary">
+                View All Files
+            </a>
+        </div>
+
         <p>Welcome, {{ auth()->user()->name }}!</p>
 
         <div class="alert alert-info">

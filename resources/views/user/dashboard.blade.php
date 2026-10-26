@@ -14,7 +14,23 @@
     <div class="container py-5">
         <h1>My Dashboard</h1>
 
+        <a href="{{ route('files.create') }}"
+        class="btn btn-primary mt-3">
+            Upload New File
+        </a>
+
+        <a href="{{ route('files.index') }}"
+        class="btn btn-outline-primary mt-3">
+            My Files
+        </a>
+
         <p>Welcome, {{ auth()->user()->name }}!</p>
+
+        @if (session('success'))
+            <div class="alert alert-success mt-3">
+                {{ session('success') }}
+            </div>
+        @endif
 
         <div class="card mt-4">
             <div class="card-body">

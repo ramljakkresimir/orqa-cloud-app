@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FileController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -51,6 +52,20 @@ Route::middleware('auth')->group(function () {
         \App\Http\Controllers\ProfileController::class,
         'destroy'
     ])->name('profile.destroy');
+});
+
+// File listing for users and super administrators.
+Route::get('/files', [FileController::class, 'index'])
+    ->middleware(['auth', 'role:user,super_admin'])
+    ->name('files.index');
+
+// File management routes for regular users.
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/files/create', [FileController::class, 'create'])
+        ->name('files.create');
+
+    Route::post('/files', [FileController::class, 'store'])
+        ->name('files.store');
 });
 
 require __DIR__.'/auth.php';
