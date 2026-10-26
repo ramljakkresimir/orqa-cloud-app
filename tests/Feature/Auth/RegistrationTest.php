@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -18,14 +20,34 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        Role::firstOrCreate(['name' => 'user']);
+
         $response = $this->post('/register', [
-            'name' => 'Test User',
+            'name' => 'Test',
+            'surname' => 'User',
+            'username' => 'testuser',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'Password123!',
+            'password_confirmation' => 'Password123!',
         ]);
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertSessionHasNoErrors();
+
+        $user = User::where('username', 'testuser')
+            ->firstOrFail();
+
+        $this->assertAuthenticatedAs($user);
+
+        $this->assertTrue($user->hasRole('user'));
+        $this->assertFalse($user->hasRole('super_admin'));
+
+        $this->assertEquals(
+            3221225472,
+            $user->quota_bytes
+        );
+
+        $response->assertRedirect(
+            route('dashboard', absolute: false)
+        );
     }
 }
