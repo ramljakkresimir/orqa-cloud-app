@@ -17,17 +17,17 @@
 
                         <p class="mt-2 text-sm text-gray-600">
                             Total:
-                            {{ number_format($totalBytes / (1024 ** 3), 2) }} GiB
+                            {{ number_format($totalBytes / (1024 ** 3), 2) }} GB
                         </p>
 
                         <p class="mt-1 text-sm text-gray-600">
                             Used:
-                            {{ number_format($usedBytes / (1024 ** 3), 2) }} GiB
+                            {{ number_format($usedBytes / (1024 ** 3), 2) }} GB
                         </p>
 
                         <p class="mt-1 text-sm text-gray-600">
                             Free:
-                            {{ number_format($remainingBytes / (1024 ** 3), 2) }} GiB
+                            {{ number_format($remainingBytes / (1024 ** 3), 2) }} GB
                         </p>
 
                         <div

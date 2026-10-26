@@ -122,7 +122,7 @@
                                         {{ number_format(
                                             $file->size_bytes / 1024 / 1024,
                                             2
-                                        ) }} MiB
+                                        ) }} MB
                                     </td>
 
                                     <td>

@@ -30,7 +30,7 @@
             <div class="card-body">
 
                 @php
-                    $toGiB = fn (int $bytes): string =>
+                    $toGB = fn (int $bytes): string =>
                         number_format($bytes / (1024 ** 3), 2);
                 @endphp
 
@@ -80,13 +80,13 @@
                                         </a>
                                     </td>
 
-                                    <td>{{ $toGiB($totalBytes) }} GiB</td>
+                                    <td>{{ $toGB($totalBytes) }} GB</td>
 
-                                    <td>{{ $toGiB($usedBytes) }} GiB</td>
+                                    <td>{{ $toGB($usedBytes) }} GB</td>
 
                                     <td>
                                         <span class="text-success fw-semibold">
-                                            {{ $toGiB($remainingBytes) }} GiB
+                                            {{ $toGB($remainingBytes) }} GB
                                         </span>
                                     </td>
 

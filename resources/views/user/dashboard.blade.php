@@ -23,7 +23,7 @@
         class="btn btn-outline-primary mt-3">
             My Files
         </a>
-        
+
         <a href="{{ route('profile.edit') }}"
         class="btn btn-outline-secondary mt-3">
             My Profile
@@ -49,7 +49,7 @@
                 ? min(100, round(($usedBytes / $totalBytes) * 100, 1))
                 : 0;
 
-            $toGiB = fn (int $bytes): string =>
+            $toGB = fn (int $bytes): string =>
                 number_format($bytes / (1024 ** 3), 2);
         @endphp
 
@@ -61,18 +61,18 @@
                 <div class="row text-center mb-4">
                     <div class="col-md-4">
                         <p class="text-muted mb-1">Total Space</p>
-                        <h4>{{ $toGiB($totalBytes) }} GiB</h4>
+                        <h4>{{ $toGB($totalBytes) }} GB</h4>
                     </div>
 
                     <div class="col-md-4">
                         <p class="text-muted mb-1">Used Space</p>
-                        <h4>{{ $toGiB($usedBytes) }} GiB</h4>
+                        <h4>{{ $toGB($usedBytes) }} GB</h4>
                     </div>
 
                     <div class="col-md-4">
                         <p class="text-muted mb-1">Free Space</p>
                         <h4 class="text-success">
-                            {{ $toGiB($remainingBytes) }} GiB
+                            {{ $toGB($remainingBytes) }} GB
                         </h4>
                     </div>
                 </div>

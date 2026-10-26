@@ -33,7 +33,7 @@
                         {{ number_format(
                             $remainingBytes / 1024 / 1024 / 1024,
                             2
-                        ) }} GiB
+                        ) }} GB
                     </strong>
                 </p>
 
@@ -64,7 +64,7 @@
                         @enderror
 
                         <div class="form-text">
-                            Maximum file size: 20 MiB.
+                            Maximum file size: 20 MB.
                             Supported: PDF, Office, TXT, JPG, PNG, ZIP.
                         </div>
                     </div>
