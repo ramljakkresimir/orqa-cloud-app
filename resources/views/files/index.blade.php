@@ -10,6 +10,11 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
     >
+    <!-- Bootstrap Icons -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet"
+    >
 </head>
 
 <body class="bg-light">
@@ -67,9 +72,46 @@
 
                         <tbody>
                             @forelse ($files as $file)
+                                @php
+                                    $extension = strtolower($file->extension ?? '');
+
+                                    $iconClass = match ($extension) {
+                                        'pdf' => 'bi-file-earmark-pdf-fill text-danger',
+
+                                        'doc', 'docx' =>
+                                            'bi-file-earmark-word-fill text-primary',
+
+                                        'xls', 'xlsx', 'csv' =>
+                                            'bi-file-earmark-excel-fill text-success',
+
+                                        'ppt', 'pptx' =>
+                                            'bi-file-earmark-ppt-fill text-warning',
+
+                                        'jpg', 'jpeg', 'png', 'gif', 'webp' =>
+                                            'bi-file-earmark-image-fill text-info',
+
+                                        'zip', 'rar', '7z' =>
+                                            'bi-file-earmark-zip-fill text-secondary',
+
+                                        'txt' =>
+                                            'bi-file-earmark-text-fill text-secondary',
+
+                                        default =>
+                                            'bi-file-earmark-fill text-secondary',
+                                    };
+                                @endphp
                                 <tr>
                                     <td>
-                                        {{ $file->original_name }}
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i
+                                                class="bi {{ $iconClass }} fs-4"
+                                                aria-hidden="true"
+                                            ></i>
+
+                                            <span class="text-break">
+                                                {{ $file->original_name }}
+                                            </span>
+                                        </div>
                                     </td>
 
                                     <td>
