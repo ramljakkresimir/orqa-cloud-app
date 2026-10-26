@@ -1,66 +1,41 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
+<x-cloud-auth-layout title="Welcome back" subtitle="Sign in to manage your files securely.">
     <form method="POST" action="{{ route('login') }}">
         @csrf
-
-        <!-- Username -->
-        <div>
-            <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('username')" class="mt-2" />
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a
-                    class="underline text-sm text-gray-600 hover:text-gray-900"
-                    href="{{ route('password.request') }}"
-                >
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-
-        @if (Route::has('register'))
-            <div class="mt-4 text-center">
-                <span class="text-sm text-gray-600">
-                    Don't have an account?
-                </span>
-
-                <a
-                    href="{{ route('register') }}"
-                    class="underline text-sm text-indigo-600 hover:text-indigo-800"
-                >
-                    Create an account
-                </a>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <div class="cloud-input-wrap">
+                <i class="bi bi-person" aria-hidden="true"></i>
+                <input id="username" type="text" name="username" value="{{ old('username') }}"
+                       class="form-control cloud-input @error('username') is-invalid @enderror"
+                       autocomplete="username" required autofocus placeholder="Enter your username">
             </div>
-        @endif
+            @error('username') <div class="text-danger small mt-1" role="alert">{{ $message }}</div> @enderror
+        </div>
+        <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center gap-2">
+                <label for="password" class="form-label">Password</label>
+                @if (Route::has('password.request'))
+                    <a class="cloud-auth-link small mb-2" href="{{ route('password.request') }}">Forgot password?</a>
+                @endif
+            </div>
+            <div class="cloud-input-wrap">
+                <i class="bi bi-lock" aria-hidden="true"></i>
+                <input id="password" type="password" name="password"
+                       class="form-control cloud-input @error('password') is-invalid @enderror"
+                       required autocomplete="current-password" placeholder="Enter your password">
+            </div>
+            @error('password') <div class="text-danger small mt-1" role="alert">{{ $message }}</div> @enderror
+        </div>
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="remember" id="remember_me" value="1"
+                   {{ old('remember') ? 'checked' : '' }}>
+            <label class="form-check-label cloud-muted" for="remember_me">Remember me</label>
+        </div>
+        <button class="btn btn-primary cloud-auth-submit w-100" type="submit">
+            Sign in <i class="bi bi-arrow-right ms-2" aria-hidden="true"></i>
+        </button>
     </form>
-</x-guest-layout>
+    @if (Route::has('register'))
+        <p class="cloud-auth-switch">Don't have an account? <a href="{{ route('register') }}">Create an account</a></p>
+    @endif
+</x-cloud-auth-layout>

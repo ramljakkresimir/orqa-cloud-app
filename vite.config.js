@@ -8,6 +8,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/css/cloud.css',
+                'resources/css/cloud-auth.css',
                 'resources/js/cloud.js',
             ],
             refresh: true,

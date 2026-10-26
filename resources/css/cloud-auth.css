@@ -1,0 +1,24 @@
+/* Login & registration styling; shared Bootstrap styles remain in cloud.css. */
+.cloud-auth-body { min-height:100vh; }
+.cloud-auth-shell { min-height:100vh; display:flex; flex-direction:column; }
+.cloud-auth-header { display:flex; align-items:center; justify-content:space-between; padding:24px clamp(18px,5vw,72px); }
+.cloud-auth-brand { display:inline-flex; align-items:center; gap:10px; color:var(--cloud-text); text-decoration:none; font-size:19px; font-weight:600; letter-spacing:-.45px; }
+.cloud-auth-header-label { color:var(--cloud-muted); font-size:13px; }
+.cloud-auth-main { flex:1; display:flex; align-items:center; justify-content:center; padding:20px 16px 48px; }
+.cloud-auth-card { width:100%; max-width:490px; padding:clamp(25px,4.5vw,44px); background:#fff; border:1px solid var(--cloud-border); border-radius:22px; box-shadow:0 16px 52px rgba(30,55,105,.065); }
+.cloud-auth-eyebrow { color:#2563eb; letter-spacing:1.2px; font-size:11px; font-weight:750; margin-bottom:16px; }
+.cloud-auth-eyebrow i { font-size:14px; margin-right:5px; }
+.cloud-auth-title { font-size:clamp(25px,3vw,31px); font-weight:750; letter-spacing:-1px; margin:0 0 8px; }
+.cloud-auth-subtitle { color:var(--cloud-muted); font-size:14px; margin:0 0 28px; }
+.cloud-auth-card .form-label { font-size:13px; font-weight:600; color:#344054; margin-bottom:8px; }
+.cloud-auth-card .form-control { min-height:46px; border-color:#dce3ef; border-radius:10px; font-size:14px; padding:10px 13px; }
+.cloud-auth-card .form-control:focus { border-color:#93b4ff; box-shadow:0 0 0 .2rem rgba(37,99,235,.11); }
+.cloud-input-wrap { position:relative; }
+.cloud-input-wrap > i { position:absolute; top:50%; transform:translateY(-50%); left:15px; font-size:17px; color:#98a2b3; pointer-events:none; }
+.cloud-auth-card .cloud-input { padding-left:43px; }
+.cloud-auth-link, .cloud-auth-switch a { color:#2563eb; text-decoration:none; font-weight:600; }
+.cloud-auth-link:hover, .cloud-auth-switch a:hover { text-decoration:underline; }
+.cloud-auth-submit { min-height:48px; border-radius:10px; font-size:14px; font-weight:650; }
+.cloud-auth-switch { text-align:center; margin:25px 0 0; color:var(--cloud-muted); font-size:13px; }
+.cloud-auth-footer { text-align:center; padding:0 16px 22px; font-size:12px; color:#98a2b3; }
+@media(max-width:575.98px) { .cloud-auth-header { padding:18px; } .cloud-auth-main { align-items:flex-start; padding-top:25px; } .cloud-auth-card { border-radius:17px; } }
