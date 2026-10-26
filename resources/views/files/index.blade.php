@@ -1,192 +1,95 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>My Files - ORQA Cloud</title>
-
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    >
-    <!-- Bootstrap Icons -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        rel="stylesheet"
-    >
-</head>
-
-<body class="bg-light">
-    <div class="container py-5">
-
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>
-                {{ $isSuperAdmin ? 'All Files' : 'My Files' }}
-            </h1>
-
-            <a
-                href="{{ route(
-                    $isSuperAdmin ? 'admin.dashboard' : 'user.dashboard'
-                ) }}"
-                class="btn btn-outline-secondary"
-            >
-                Back to Dashboard
-            </a>
+<x-cloud-layout :title="$isSuperAdmin ? 'All Files' : 'My Files'">
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-start gap-3 mb-4">
+        <div>
+            <div class="cloud-section-eyebrow mb-2">CLOUD STORAGE</div>
+            <h1 class="h2 fw-bold mb-1">{{ $isSuperAdmin ? 'All files' : 'My files' }}</h1>
+            <p class="cloud-muted mb-0">{{ $isSuperAdmin ? 'Manage files uploaded by all users.' : 'Find, download and manage your documents.' }}</p>
         </div>
+        @unless ($isSuperAdmin)
+            <a href="{{ route('files.create') }}" class="btn btn-primary cloud-action-btn">
+                <i class="bi bi-cloud-arrow-up me-2" aria-hidden="true"></i>Upload file
+            </a>
+        @endunless
+    </div>
 
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
+    <section class="card cloud-card border-0" aria-label="Files list">
+        <div class="card-body">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <h2 class="h5 fw-semibold mb-0">Documents</h2>
+                <span class="cloud-count-pill">{{ $files->total() }} {{ $files->total() === 1 ? 'file' : 'files' }}</span>
             </div>
-        @endif
-
-        @if (! $isSuperAdmin)
-            <div class="mb-4">
-                <a href="{{ route('files.create') }}"
-                   class="btn btn-primary">
-                    Upload New File
-                </a>
-            </div>
-        @endif
-
-        <div class="card">
-            <div class="card-body">
-
+            @if ($files->isEmpty())
+                <div class="cloud-empty-state text-center">
+                    <i class="bi bi-folder2-open d-block mb-2" aria-hidden="true"></i>
+                    <p class="fw-semibold mb-1">No files found</p>
+                    <p class="cloud-muted mb-3">{{ $isSuperAdmin ? 'There are no uploaded files yet.' : 'Upload your first document to get started.' }}</p>
+                    @unless ($isSuperAdmin)
+                        <a href="{{ route('files.create') }}" class="btn btn-primary">Upload a file</a>
+                    @endunless
+                </div>
+            @else
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover align-middle">
-
-                        <thead>
-                            <tr>
-                                <th>File Name</th>
-                                <th>Type</th>
-                                <th>Size</th>
-                                <th>Uploaded At</th>
-
-                                @if ($isSuperAdmin)
-                                    <th>Added By</th>
-                                @endif
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-
+                    <table class="table align-middle cloud-dashboard-table cloud-files-table mb-0">
+                        <thead><tr>
+                            <th scope="col">File name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">Uploaded</th>
+                            @if ($isSuperAdmin)<th scope="col">Added By</th>@endif
+                            <th scope="col" class="text-end">Actions</th>
+                        </tr></thead>
                         <tbody>
-                            @forelse ($files as $file)
+                            @foreach ($files as $file)
                                 @php
                                     $extension = strtolower($file->extension ?? '');
-
                                     $iconClass = match ($extension) {
                                         'pdf' => 'bi-file-earmark-pdf-fill text-danger',
-
-                                        'doc', 'docx' =>
-                                            'bi-file-earmark-word-fill text-primary',
-
-                                        'xls', 'xlsx', 'csv' =>
-                                            'bi-file-earmark-excel-fill text-success',
-
-                                        'ppt', 'pptx' =>
-                                            'bi-file-earmark-ppt-fill text-warning',
-
-                                        'jpg', 'jpeg', 'png', 'gif', 'webp' =>
-                                            'bi-file-earmark-image-fill text-info',
-
-                                        'zip', 'rar', '7z' =>
-                                            'bi-file-earmark-zip-fill text-secondary',
-
-                                        'txt' =>
-                                            'bi-file-earmark-text-fill text-secondary',
-
-                                        default =>
-                                            'bi-file-earmark-fill text-secondary',
+                                        'doc', 'docx' => 'bi-file-earmark-word-fill text-primary',
+                                        'xls', 'xlsx', 'csv' => 'bi-file-earmark-excel-fill text-success',
+                                        'ppt', 'pptx' => 'bi-file-earmark-ppt-fill text-warning',
+                                        'jpg', 'jpeg', 'png', 'gif', 'webp' => 'bi-file-earmark-image-fill text-info',
+                                        'zip', 'rar', '7z' => 'bi-file-earmark-zip-fill text-secondary',
+                                        'txt' => 'bi-file-earmark-text-fill text-secondary',
+                                        default => 'bi-file-earmark-fill text-secondary',
                                     };
                                 @endphp
                                 <tr>
                                     <td>
-                                        <div class="d-flex align-items-center gap-2">
-                                            <i
-                                                class="bi {{ $iconClass }} fs-4"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            <span class="text-break">
-                                                {{ $file->original_name }}
-                                            </span>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <span class="cloud-file-icon"><i class="bi {{ $iconClass }}" aria-hidden="true"></i></span>
+                                            <span class="cloud-file-name fw-medium text-break">{{ $file->original_name }}</span>
                                         </div>
                                     </td>
-
+                                    <td><span class="cloud-type-badge">{{ strtoupper($file->extension ?: 'FILE') }}</span></td>
+                                    <td class="text-nowrap">{{ number_format($file->size_bytes / 1024 / 1024, 2) }} MB</td>
+                                    <td class="text-nowrap">{{ $file->created_at->format('d.m.Y. H:i') }}</td>
+                                    @if ($isSuperAdmin)<td>{{ $file->user?->username ?? 'Unknown' }}</td>@endif
                                     <td>
-                                        {{ strtoupper($file->extension ?: 'FILE') }}
-                                    </td>
-
-                                    <td>
-                                        {{ number_format(
-                                            $file->size_bytes / 1024 / 1024,
-                                            2
-                                        ) }} MB
-                                    </td>
-
-                                    <td>
-                                        {{ $file->created_at->format('d.m.Y. H:i') }}
-                                    </td>
-
-                                    @if ($isSuperAdmin)
-                                        <td>
-                                            {{ $file->user?->username ?? 'Unknown' }}
-                                        </td>
-                                    @endif
-                                        <td>
-                                            <div class="d-flex gap-2">
-
-                                                <!-- Download -->
-                                                <a
-                                                    href="{{ route('files.download', $file) }}"
-                                                    class="btn btn-sm btn-outline-primary"
-                                                >
-                                                    Download
-                                                </a>
-
-                                                <!-- Delete -->
-                                                <form
-                                                    action="{{ route('files.destroy', $file) }}"
-                                                    method="POST"
-                                                    onsubmit="return confirm('Are you sure you want to delete this file?');"
-                                                >
-                                                    @csrf
-                                                    @method('DELETE')
-
-                                                    <button
-                                                        type="submit"
-                                                        class="btn btn-sm btn-outline-danger"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </form>
-
-                                            </div>
-                                        </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td
-                                        colspan="{{ $isSuperAdmin ? 6 : 5 }}"
-                                        class="text-center text-muted py-4"
-                                    >
-                                        No files found.
+                                        <div class="d-flex gap-2 justify-content-end flex-wrap">
+                                            <a href="{{ route('files.download', $file) }}" class="btn btn-sm btn-outline-primary cloud-table-action" aria-label="Download {{ $file->original_name }}">
+                                                <i class="bi bi-download me-1" aria-hidden="true"></i>Download
+                                            </a>
+                                            <form action="{{ route('files.destroy', $file) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this file?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger cloud-table-action" aria-label="Delete {{ $file->original_name }}">
+                                                    <i class="bi bi-trash me-1" aria-hidden="true"></i>Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endforeach
                         </tbody>
-
                     </table>
                 </div>
-
-                <div class="mt-4">
-                    {{ $files->links('pagination::bootstrap-5') }}
-                </div>
-
-            </div>
+                @if ($files->hasPages())
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mt-4">
+                        <small class="cloud-muted">Showing {{ $files->firstItem() }}–{{ $files->lastItem() }} of {{ $files->total() }}</small>
+                        <div class="cloud-file-pagination">{{ $files->links('pagination::bootstrap-5') }}</div>
+                    </div>
+                @endif
+            @endif
         </div>
-
-    </div>
-</body>
-</html>
+    </section>
+</x-cloud-layout>

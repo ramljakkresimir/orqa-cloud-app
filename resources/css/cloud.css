@@ -40,3 +40,19 @@ body.cloud-body { margin:0; color:var(--cloud-text); background:var(--cloud-bg);
 .cloud-empty-state { padding:36px 12px; border:1px dashed #dce4f2; border-radius:12px; }
 .cloud-empty-state > i { color:#2563eb; font-size:32px; }
 @media(max-width:575.98px) { .cloud-stat-card .card-body { padding:20px; } }
+
+/* Phase 5.4 — files listing and upload */
+.cloud-section-eyebrow { font-size:11px; font-weight:750; letter-spacing:.12em; color:#2563eb; }
+.cloud-count-pill { font-size:12px; font-weight:650; color:#475467; border:1px solid #e5eaf2; background:#f8faff; border-radius:99px; padding:6px 12px; }
+.cloud-file-icon { width:38px; height:38px; display:inline-grid; flex:0 0 38px; place-items:center; border-radius:11px; background:#f1f5fb; font-size:20px; }
+.cloud-type-badge { display:inline-block; border-radius:7px; padding:4px 8px; background:#f2f5fa; color:#475467; font-size:11px; font-weight:750; }
+.cloud-files-table th, .cloud-files-table td { padding:14px 12px; }
+.cloud-files-table td:first-child, .cloud-files-table th:first-child { padding-left:0; }
+.cloud-files-table td:last-child, .cloud-files-table th:last-child { padding-right:0; }
+.cloud-files-table .cloud-file-name { max-width:320px; min-width:140px; }
+.cloud-table-action { border-radius:8px; white-space:nowrap; }
+.cloud-upload-zone { border:2px dashed #d9e3f3; border-radius:16px; padding:clamp(20px,4vw,42px); background:#f9fbff; text-align:center; }
+.cloud-upload-icon { font-size:42px; color:#2563eb; }
+.cloud-file-pagination .pagination { margin-bottom:0; flex-wrap:wrap; }
+.cloud-file-pagination .page-link { color:#2563eb; }
+.cloud-file-pagination .page-item.active .page-link { color:#fff; background:#2563eb; border-color:#2563eb; }
