@@ -447,4 +447,56 @@ class FileManagementTest extends TestCase
 
         $this->assertDatabaseCount('files', 0);
     }
+
+    public function test_download_rejects_storage_path_outside_file_owner_directory(): void
+    {
+        // Create a real file belonging to user2.
+        $file = $this->createTestFile($this->user2);
+
+        // Simulate corrupted database metadata:
+        // user1 is now recorded as the owner, but the physical
+        // file remains inside user2's storage directory.
+        $file->update([
+            'user_id' => $this->user1->id,
+        ]);
+
+        // FilePolicy sees user1 as the owner.
+        // Storage path still points to user2's directory.
+        $this->actingAs($this->user1)
+            ->get(route('files.download', $file))
+            ->assertNotFound();
+
+        // The original physical file must remain untouched.
+        Storage::disk('cloud')->assertExists(
+            $file->storage_path
+        );
+    }
+    
+    public function test_delete_rejects_storage_path_outside_file_owner_directory(): void
+    {
+        // Create a real file belonging to user2.
+        $file = $this->createTestFile($this->user2);
+
+        $originalPath = $file->storage_path;
+
+        $file->update([
+            'user_id' => $this->user1->id,
+        ]);
+
+        // FilePolicy allows user1 based on database ownership,
+        // but the storage path belongs to user2.
+        $this->actingAs($this->user1)
+            ->delete(route('files.destroy', $file))
+            ->assertNotFound();
+
+        // The physical file must not be deleted.
+        Storage::disk('cloud')->assertExists($originalPath);
+
+        // The database record must also remain intact.
+        $this->assertDatabaseHas('files', [
+            'id' => $file->id,
+            'user_id' => $this->user1->id,
+            'storage_path' => $originalPath,
+        ]);
+    }
 }

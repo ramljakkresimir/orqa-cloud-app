@@ -141,11 +141,40 @@ class FileController extends Controller
             ->route('user.dashboard')
             ->with('success', 'File uploaded successfully.');
     }
-    
-    
-    /**
-     * Download a file if the user is authorized.
-     */
+
+    private function validateFileStoragePath(File $file): void
+    {
+        // New uploads use the private cloud disk.
+        // Keep legacy local disk support unchanged for now.
+        if ($file->disk !== 'cloud') {
+            return;
+        }
+
+        $expectedDirectory = 'users/'.$file->user_id.'/';
+
+        $path = $file->storage_path;
+
+        abort_unless(
+            is_string($path)
+            && str_starts_with($path, $expectedDirectory),
+            404
+        );
+
+        // Only files directly inside the owner's directory
+        // are allowed. Reject traversal and nested paths.
+        $filename = substr($path, strlen($expectedDirectory));
+
+        abort_unless(
+            $filename !== ''
+            && $filename !== '.'
+            && $filename !== '..'
+            && ! str_contains($filename, '/')
+            && ! str_contains($filename, '\\')
+            && ! str_contains($filename, '..'),
+            404
+        );
+    } 
+
     public function download(Request $request, File $file): StreamedResponse
     {
         Gate::authorize('download', $file);
@@ -155,6 +184,9 @@ class FileController extends Controller
             in_array($file->disk, ['cloud', 'local'], true),
             404
         );
+
+        // Verify that the cloud path belongs to the file owner.
+        $this->validateFileStoragePath($file);
 
         $disk = Storage::disk($file->disk);
 
@@ -169,10 +201,6 @@ class FileController extends Controller
         );
     }
 
-    
-    /**
-     * Delete a file if the user is authorized.
-     */
     public function destroy(Request $request, File $file): RedirectResponse
     {
         Gate::authorize('delete', $file);
@@ -191,10 +219,13 @@ class FileController extends Controller
             // Recheck authorization against the current record.
             Gate::authorize('delete', $lockedFile);
 
+            
             abort_unless(
                 in_array($lockedFile->disk, ['cloud', 'local'], true),
                 404
             );
+
+            $this->validateFileStoragePath($lockedFile);
 
             $disk = Storage::disk($lockedFile->disk);
 
@@ -215,6 +246,4 @@ class FileController extends Controller
             ->route('files.index')
             ->with('success', 'File deleted successfully.');
     }
-
-
 }
