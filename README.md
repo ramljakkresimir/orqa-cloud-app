@@ -20,7 +20,7 @@ The application uses Laravel, Blade templates, and Bootstrap 5, with role-based 
 - Super administrator overview of all uploaded files
 - Super administrator overview of users and their storage usage
 - Database migrations, model factories, and seeders
-- Automated feature and unit tests
+- Automated feature tests
 
 ## Technology Stack
 
@@ -45,7 +45,7 @@ The application supports multiple roles per user.
 | Download and delete any user's files | Yes                 | No   |
 | View users and their storage usage   | Yes                 | No   |
 | Upload files                         | No                  | Yes  |
-| View, download and delete own files  | Yes                 | Yes  |
+| View, download and delete own files  | -                   | Yes  |
 | View personal storage information    | —                   | Yes  |
 | Update own profile                   | Yes                 | Yes  |
 
@@ -287,11 +287,13 @@ The tests require PHP SQLite support.
 
 ## Continuous Integration
 
-The project uses GitHub Actions to run automated tests against PHP 8.2 and PHP 8.3.
+The project uses GitHub Actions for automated testing.
 
-The CI workflow should install the required PHP and Node.js dependencies, prepare the test environment, and execute the automated test suite.
+On every push to the `main` branch and on pull requests, GitHub Actions installs the required dependencies, prepares the testing environment, and runs the automated test suite on PHP 8.2 and PHP 8.3.
 
-The workflow and its latest execution results can be reviewed in the repository's [Actions tab](https://github.com/ramljakkresimir/orqa-cloud-app/actions).
+The workflow configuration is located in `.github/workflows/tests.yml`.
+
+Test results and workflow execution history are available in the repository's [Actions tab](https://github.com/ramljakkresimir/orqa-cloud-app/actions).
 
 ## Security and Configuration Notes
 
