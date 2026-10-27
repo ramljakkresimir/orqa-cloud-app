@@ -22,8 +22,8 @@ class FileFactory extends Factory
         return [
             'user_id' => User::factory(),
             'original_name' => fake()->word() . '.txt',
-            'disk' => 'local',
-            'storage_path' => 'factory/' . Str::uuid() . '.txt',
+            'disk' => 'cloud',
+            'storage_path' => 'pending-' . Str::uuid() . '.txt',
             'mime_type' => 'text/plain',
             'extension' => 'txt',
             'size_bytes' => strlen($content),
@@ -33,8 +33,16 @@ class FileFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (File $file) {
-            Storage::disk($file->disk)->put(
-                $file->storage_path,
+            $path = 'users/'.$file->user_id.'/'
+                . Str::uuid().'.txt';
+
+            $file->update([
+                'disk' => 'cloud',
+                'storage_path' => $path,
+            ]);
+
+            Storage::disk('cloud')->put(
+                $path,
                 "ORQA Cloud test document.\n"
             );
         });

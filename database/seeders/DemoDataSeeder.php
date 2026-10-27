@@ -89,20 +89,20 @@ class DemoDataSeeder extends Seeder
     {
         for ($i = 1; $i <= $count; $i++) {
             $originalName = "document-{$i}.txt";
-            $storagePath = "demo/{$user->id}/{$originalName}";
+            $storagePath = "users/{$user->id}/demo-document-{$i}.txt";
 
             $content = "ORQA Cloud demo document {$i}\n";
             $content .= "Owner: {$user->username}\n";
 
-            Storage::disk('local')->put($storagePath, $content);
+            Storage::disk('cloud')->put($storagePath, $content);
 
             File::updateOrCreate(
                 [
-                    'disk' => 'local',
                     'storage_path' => $storagePath,
                 ],
                 [
                     'user_id' => $user->id,
+                    'disk' => 'cloud',
                     'original_name' => $originalName,
                     'mime_type' => 'text/plain',
                     'extension' => 'txt',
