@@ -179,11 +179,7 @@ class FileController extends Controller
     {
         Gate::authorize('download', $file);
 
-        // Only allow known private storage disks.
-        abort_unless(
-            in_array($file->disk, ['cloud', 'local'], true),
-            404
-        );
+        abort_unless($file->disk === 'cloud', 404);
 
         // Verify that the cloud path belongs to the file owner.
         $this->validateFileStoragePath($file);
@@ -219,11 +215,7 @@ class FileController extends Controller
             // Recheck authorization against the current record.
             Gate::authorize('delete', $lockedFile);
 
-            
-            abort_unless(
-                in_array($lockedFile->disk, ['cloud', 'local'], true),
-                404
-            );
+            abort_unless($lockedFile->disk === 'cloud', 404);
 
             $this->validateFileStoragePath($lockedFile);
 

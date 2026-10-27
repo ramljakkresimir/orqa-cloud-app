@@ -499,4 +499,45 @@ class FileManagementTest extends TestCase
             'storage_path' => $originalPath,
         ]);
     }
+    
+    public function test_user_cannot_download_file_from_local_disk(): void
+    {
+        $file = $this->createTestFile(
+            $this->user1,
+            'legacy.txt',
+            100,
+            'local'
+        );
+
+        $this->actingAs($this->user1)
+            ->get(route('files.download', $file))
+            ->assertNotFound();
+
+        Storage::disk('local')->assertExists(
+            $file->storage_path
+        );
+    }
+
+    public function test_user_cannot_delete_file_from_local_disk(): void
+    {
+        $file = $this->createTestFile(
+            $this->user1,
+            'legacy.txt',
+            100,
+            'local'
+        );
+
+        $this->actingAs($this->user1)
+            ->delete(route('files.destroy', $file))
+            ->assertNotFound();
+
+        Storage::disk('local')->assertExists(
+            $file->storage_path
+        );
+
+        $this->assertDatabaseHas('files', [
+            'id' => $file->id,
+            'disk' => 'local',
+        ]);
+    }
 }
