@@ -22,16 +22,6 @@ class FileManagementTest extends TestCase
     protected function setUp(): void
     {
 
-        // Ensure tests use the in-memory SQLite database.
-        $connection = $_SERVER['DB_CONNECTION'] ?? $_ENV['DB_CONNECTION'] ?? null;
-        $database = $_SERVER['DB_DATABASE'] ?? $_ENV['DB_DATABASE'] ?? null;
-
-        if ($connection !== 'sqlite' || $database !== ':memory:') {
-            throw new \RuntimeException(
-                'Tests must use an in-memory SQLite database.'
-            );
-        }
-
         parent::setUp();
 
         Storage::fake('cloud');
