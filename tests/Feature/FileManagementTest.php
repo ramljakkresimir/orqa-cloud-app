@@ -431,4 +431,20 @@ class FileManagementTest extends TestCase
         ]);
     }
 
+    public function test_allowed_mime_type_with_forbidden_extension_is_rejected(): void
+    {
+        $file = UploadedFile::fake()->create(
+            'document.php',
+            10,
+            'application/pdf'
+        );
+
+        $this->actingAs($this->user1)
+            ->post(route('files.store'), [
+                'document' => $file,
+            ])
+            ->assertSessionHasErrors('document');
+
+        $this->assertDatabaseCount('files', 0);
+    }
 }

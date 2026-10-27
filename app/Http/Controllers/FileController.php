@@ -69,7 +69,15 @@ class FileController extends Controller
                     'ppt', 'pptx',
                     'jpg', 'jpeg', 'png',
                     'zip',
-                ])->max('20mb'),
+                ])->extensions([
+                    'pdf', 'txt',
+                    'doc', 'docx',
+                    'xls', 'xlsx',
+                    'ppt', 'pptx',
+                    'jpg', 'jpeg', 'png',
+                    'zip',
+                ])
+                ->max('20mb'),
             ],
         ]);
 
