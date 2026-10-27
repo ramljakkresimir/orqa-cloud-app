@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class ProfileController extends Controller
 {
@@ -64,6 +65,15 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
+        // Prevent deletion while the user has files.
+        if ($user->files()->exists()) {
+            throw ValidationException::withMessages([
+                'account' => 'Please delete all your files before deleting your account.',
+            ]);
+        }
+
+        // Logout before deleting the user to prevent
+        // Laravel from saving the deleted user model.
         Auth::logout();
 
         $user->delete();
